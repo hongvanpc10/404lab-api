@@ -6,34 +6,34 @@ export type UserDocument = HydratedDocument<User>;
 
 @Schema({ timestamps: true })
 export class User {
-  @Prop()
+  @Prop({ trim: true })
   name: string;
 
-  @Prop()
+  @Prop({ trim: true })
   email: string;
 
   @Prop()
   password: string;
 
-  @Prop({ default: '' })
+  @Prop({ default: '', trim: true })
   bio: string;
 
   @Prop({ slug: 'name', unique: true })
   slug: string;
 
-  @Prop({ default: '' })
+  @Prop({ default: '', trim: true })
   avatar: string;
 
-  @Prop({ default: '' })
+  @Prop({ default: '', trim: true })
   facebook: string;
 
-  @Prop({ default: '' })
+  @Prop({ default: '', trim: true })
   linkedin: string;
 
-  @Prop({ default: '' })
+  @Prop({ default: '', trim: true })
   github: string;
 
-  @Prop({ default: '' })
+  @Prop({ default: '', trim: true })
   website: string;
 
   @Prop({ default: [Role.User] })

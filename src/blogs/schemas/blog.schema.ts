@@ -7,13 +7,13 @@ export type BlogDocument = HydratedDocument<Blog>;
 
 @Schema({ timestamps: true })
 export class Blog {
-  @Prop()
+  @Prop({ trim: true })
   title: string;
 
-  @Prop({ default: '' })
+  @Prop({ default: '', trim: true })
   description: string;
 
-  @Prop()
+  @Prop({ trim: true })
   thumb: string;
 
   @Prop()

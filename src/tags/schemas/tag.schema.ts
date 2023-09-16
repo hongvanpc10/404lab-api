@@ -5,7 +5,7 @@ export type TagDocument = HydratedDocument<Tag>;
 
 @Schema({ timestamps: true })
 export class Tag {
-  @Prop()
+  @Prop({ trim: true })
   name: string;
 
   @Prop({ slug: 'name', unique: true })

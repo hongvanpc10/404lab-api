@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { TagsService } from './tags.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Roles } from 'src/roles/roles.decorator';
@@ -14,5 +14,10 @@ export class TagsController {
   @Roles(Role.Admin)
   createTag(@Body() { name }: { name: string }) {
     return this.tagsService.createTag(name);
+  }
+
+  @Get()
+  getAllTags() {
+    return this.tagsService.getAllTags();
   }
 }

@@ -69,9 +69,11 @@ export class BlogsService {
   async getBlog(slug: string) {
     const blog = await this.blogModel
       .findOne({ slug })
-      .populate('author', '-password -email -roles');
+      .populate('author tags', '-password -email -roles');
     if (!blog) {
       throw new NotFoundException({ value: 'Blog not found', code: 2000 });
     }
+
+    return blog;
   }
 }

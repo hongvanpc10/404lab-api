@@ -12,4 +12,8 @@ export class TagsService {
     await tag.save();
     return tag;
   }
+
+  getAllTags() {
+    return this.tagModel.find().sort({ name: 1 });
+  }
 }
