@@ -4,14 +4,19 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import CreateBlogDto from './dto/createBlog.dto';
 import { Blog } from './schemas/blog.schema';
 import UpdateBlogDto from './dto/updateBlog.dto';
+import paginate, { PaginationOptions } from 'src/utils/paginate';
+import { Tag } from 'src/tags/schemas/tag.schema';
 
 @Injectable()
 export class BlogsService {
-  constructor(@InjectModel(Blog.name) private blogModel: Model<Blog>) {}
+  constructor(
+    @InjectModel(Blog.name) private blogModel: Model<Blog>,
+    @InjectModel(Tag.name) private TagModel: Model<Tag>,
+  ) {}
 
   async createBlog(
     authorId: string,
@@ -75,5 +80,39 @@ export class BlogsService {
     }
 
     return blog;
+  }
+
+  async getBlogs(paginationOptions?: PaginationOptions) {
+    const result = await paginate<Blog>(
+      this.blogModel,
+      {},
+      {
+        populate: [
+          ['author', 'users', '-password'],
+          ['tags', 'tags'],
+        ],
+        paginationOptions,
+        select: '-content',
+      },
+    );
+    return result;
+  }
+
+  async getBlogsByTag(tagId: string, paginationOptions?: PaginationOptions) {
+    const tag = await this.TagModel.findById(tagId);
+
+    const result = await paginate<Blog>(
+      this.blogModel,
+      { tags: new mongoose.Types.ObjectId(tagId) },
+      {
+        populate: [
+          ['author', 'users', '-password'],
+          ['tags', 'tags'],
+        ],
+        paginationOptions,
+        select: '-content',
+      },
+    );
+    return { tag, ...result };
   }
 }

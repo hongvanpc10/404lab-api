@@ -6,13 +6,17 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { BlogsService } from './blogs.service';
 import CreateBlogDto from './dto/createBlog.dto';
 import UpdateBlogDto from './dto/updateBlog.dto';
+import { PaginationOptions } from 'src/utils/paginate';
 
 @Controller('blogs')
 export class BlogsController {
@@ -43,5 +47,20 @@ export class BlogsController {
   @Get(':slug')
   getBlog(@Param('slug') slug: string) {
     return this.blogsService.getBlog(slug);
+  }
+
+  @Get()
+  @UsePipes(new ValidationPipe({ transform: true }))
+  getBlogs(@Query() { limit, order, page, sort }: PaginationOptions) {
+    return this.blogsService.getBlogs({ limit, order, page, sort });
+  }
+
+  @Get('tag/:tag')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  getBlogsByTag(
+    @Param('tag') tag: string,
+    @Query() { limit, order, page, sort }: PaginationOptions,
+  ) {
+    return this.blogsService.getBlogsByTag(tag, { limit, order, page, sort });
   }
 }
