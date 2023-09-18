@@ -115,4 +115,20 @@ export class BlogsService {
     );
     return { tag, ...result };
   }
+
+  async getBlogsByUser(user: string, paginationOptions?: PaginationOptions) {
+    const result = await paginate<Blog>(
+      this.blogModel,
+      { author: new mongoose.Types.ObjectId(user) },
+      {
+        populate: [
+          ['author', 'users', '-password'],
+          ['tags', 'tags'],
+        ],
+        paginationOptions,
+        select: '-content',
+      },
+    );
+    return result ;
+  }
 }

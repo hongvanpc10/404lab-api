@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
@@ -27,6 +27,15 @@ export class UsersService {
         { new: true },
       )
       .select('-password');
+
+    return user;
+  }
+
+  async getUserBySlug(slug: string) {
+    const user = await this.userModel.findOne({ slug }).select('-password');
+    if (!user) {
+      throw new BadRequestException({ value: 'User not found' });
+    }
 
     return user;
   }

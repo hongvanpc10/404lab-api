@@ -63,4 +63,13 @@ export class BlogsController {
   ) {
     return this.blogsService.getBlogsByTag(tag, { limit, order, page, sort });
   }
+
+  @Get('user/:user')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  getBlogsByUser(
+    @Param('user') user: string,
+    @Query() { limit, order, page, sort }: PaginationOptions,
+  ) {
+    return this.blogsService.getBlogsByUser(user, { limit, order, page, sort });
+  }
 }
