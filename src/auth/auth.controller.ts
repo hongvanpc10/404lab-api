@@ -25,7 +25,7 @@ export class AuthController {
       path: '/v1/auth/refresh-token',
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: 'none',
     });
 
     return { accessToken, user };
